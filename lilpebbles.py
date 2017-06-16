@@ -9,6 +9,7 @@ app.static('/sw.js', './sw.js')
 app.static('/', './')
 app.static('/js/app.js', './src/js/app.js')
 app.static('/css/main.css', './src/css/main.css')
+app.static('/css/pebbles.css', './src/css/pebbles.css')
 
 @app.route("/")
 async def test(request):

@@ -8,6 +8,13 @@
 	* -- BASE STYLES --
 	*  * Most of these are inherited from Base, but I want to change a few.
 	*   */
+
+	.all-pebbles{
+		background: rgb(250, 250, 250);
+		margin: 2em auto;
+		border-top: 1px solid #ddd;
+		border-bottom: 1px solid #ddd;
+	}
 	body {
 		line-height: 1.7em;
 		color: #7f8c8d;
@@ -137,7 +144,7 @@
 		overflow: hidden;
 		/* The following styles are required for the "scroll-over" effect */
 		width: 100%;
-		height: 100%;
+		height: 80%;
 		top: 0;
 		left: 0;
 		position: fixed !important;

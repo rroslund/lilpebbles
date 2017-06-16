@@ -1,6 +1,8 @@
 var gulp = require('gulp');
 const wbBuild = require('workbox-build');
 
+gulp.task('default',['bundle-sw'],function(){});
+
 gulp.task('bundle-sw', () => {
 	return wbBuild.generateSW({
 		globDirectory: './src/',
