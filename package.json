@@ -1,0 +1,18 @@
+{
+  "name": "lilpebbles",
+  "version": "1.0.0",
+  "description": "lilpebbles pwa",
+  "main": "index.js",
+  "dependencies": {
+    "workbox-sw": "^1.0.1"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "workbox-build": "^1.0.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
