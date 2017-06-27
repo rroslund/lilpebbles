@@ -1,32 +1,41 @@
 # -*- coding: utf-8 -*-
+import os
+import sys
 from sanic import Sanic
 from sanic import response
+from aoiklivereload import LiveReloader
+import glob
 
 
 app = Sanic()
 
-app.static('/index.html', './src/index.html')
-app.static('/sw.js', './sw.js')
+app.static('/or-does-she', './src/views/ordoesshe.html')
 app.static('/', './')
-app.static('/images/first.jpg', './src/images/first.jpg')
-app.static('/images/second.jpg', './src/images/second.jpg')
-app.static('/images/third.jpg', './src/images/third.jpg')
-app.static('/images/fourth.jpg', './src/images/fourth.jpg')
-app.static('/images/fifth.jpg', './src/images/fifth.jpg')
-app.static('/images/first.small.jpg', './src/images/first.small.jpg')
-app.static('/images/second.small.jpg', './src/images/second.small.jpg')
-app.static('/images/third.small.jpg', './src/images/third.small.jpg')
-app.static('/images/fourth.small.jpg', './src/images/fourth.small.jpg')
-app.static('/images/fifth.small.jpg', './src/images/fifth.small.jpg')
+def addfiles(directory,virtualdir,regex):
+    files= glob.glob(os.path.dirname(os.path.abspath(__file__))+"/src/"+directory+regex)
+    for fullfile in files:
+        f = os.path.basename(fullfile)
+        virpath='/'+virtualdir+f
+        app.static(virpath,fullfile)
+        print('('+virpath+','+fullfile+')')
 
-app.static('/js/app.js', './src/js/app.js')
-app.static('/css/main.css', './src/css/main.css')
-app.static('/css/pebbles.css', './src/css/pebbles.css')
+
+addfiles('css/','css/','*.css')
+addfiles('js/','js/','*.js')
+addfiles('images/','images/','*.*')
+addfiles('views/','','*.html')
+
 
 @app.route("/")
 async def test(request):
-    return await response.file('./src/index.html')
+    return await response.file('./src/views/index.html')
     #return json({"hello": "world"})
 
+
 if __name__ == "__main__":
+    src_path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    if src_path not in sys.path:
+            sys.path.append(src_path)
+    reloader = LiveReloader()
+    reloader.start_watcher_thread()
     app.run(host="0.0.0.0", port=8000, workers=4)

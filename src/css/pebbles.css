@@ -1,0 +1,12 @@
+.ct-golden-section.pebbles{
+    width:80%;
+    height:80%;
+}
+.ct-golden-section .ct-grid {
+    stroke: rgba(255, 255, 255, .8);
+    stroke-width: 1px;
+    stroke-dasharray: 2px;
+}
+.ct-labels .ct-label{
+ color:rgba(255, 255, 255, .8);   
+}
