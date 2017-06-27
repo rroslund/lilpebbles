@@ -17,11 +17,11 @@ def addfiles(directory,virtualdir,regex):
         f = os.path.basename(fullfile)
         virpath='/'+virtualdir+f
         app.static(virpath,fullfile)
-        print('('+virpath+','+fullfile+')')
 
 
 addfiles('css/','css/','*.css')
 addfiles('js/','js/','*.js')
+addfiles('dist/','js/','*.js')
 addfiles('images/','images/','*.*')
 addfiles('views/','','*.html')
 

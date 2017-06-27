@@ -1,22 +1,20 @@
 var gulp = require('gulp');
 const wbBuild = require('workbox-build');
+var webpack=require('gulp-webpack');
+var sass = require('gulp-sass');
 
-gulp.task('default',['bundle-sw'],function(){});
+var build = ['build']
 
-gulp.task('bundle-sw', () => {
-	return wbBuild.generateSW({
-		globDirectory: './src/',
-		swDest: './src/sw.js',
-		staticFileGlobs: ['**\/*.{html,js,css}'],
-														globIgnores: ['admin.html'],
-														templatedUrls: {
-														'/shell': ['shell.hbs', 'main.css', 'shell.css'],
-														},
-														})
-														.then(() => {
-														console.log('Service worker generated.');
-														})
-														.catch((err) => {
-														console.log('[ERROR] This happened: ' + err);
-														});
-														})
+gulp.task('default',build,function(){});
+
+gulp.task('sass', function () {
+  return gulp.src('src/css/*.scss')
+    .pipe(sass().on('error', sass.logError))
+    .pipe(gulp.dest('src/css'));
+});
+
+gulp.task('build',['sass'],function(){
+    return gulp.src('src/entry.js')
+        .pipe(webpack( require('./webpack.config.js') ))
+        .pipe(gulp.dest('src/dist/'));
+});

@@ -1,3 +1,4 @@
+gulp build
 docker build -t rroslund/lilpebbles .
 docker stop lilpebbles
 docker rm lilpebbles

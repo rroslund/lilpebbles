@@ -1,0 +1,63 @@
+@import "_chartist-settings.scss";
+.ct-chart{
+    width:80%;
+    height:80%;
+    padding:10%;
+}
+.ct-golden-section .ct-grid {
+    stroke: rgba(255, 255, 255, .8);
+    stroke-width: 1px;
+    stroke-dasharray: 2px;
+}
+.ct-labels .ct-label{
+ color:rgba(255, 255, 255, .8);   
+}
+
+.content.ordoesshe .header{
+    padding: 80px 70px;
+    color:rgba(255, 255, 255, .8);   
+}
+
+
+
+.ct-legend {
+        position: relative;
+        top: 0;
+        right: 0;
+        z-index: 100;
+        list-style: none;
+        margin-bottom:5%;
+    li {
+        position: relative;
+        padding-left: 23px;
+        margin-bottom: 3px;
+        color:rgba(255, 255, 255, .8);   
+    }
+
+    li:before {
+        width: 12px;
+        height: 12px;
+        position: absolute;
+        left: 0;
+        content: '';
+        border: 3px solid transparent;
+        border-radius: 2px;
+    }
+
+    li.inactive:before {
+        background: transparent;
+    }
+
+    &.ct-legend-inside {
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+
+    @for $i from 0 to length($ct-series-colors) {
+        .ct-series-#{$i}:before {
+            background-color: nth($ct-series-colors, $i + 1);
+            border-color: nth($ct-series-colors, $i + 1);
+        }
+    }
+}

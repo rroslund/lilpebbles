@@ -1,3 +1,8 @@
+// require('chartist');
+var Chartist = require('chartist');
+require('chartist-plugin-legend');
+
+
 var chart = new Chartist.Line('.ct-chart', {
   labels: ['Winter 2017', 'Spring 2017', 'Summer 2017'],
   series: [
@@ -6,13 +11,19 @@ var chart = new Chartist.Line('.ct-chart', {
     [0,  2, 2]
   ]
 }, {
-  low: 0
+  axisY: {onlyInteger: true},
+  low: 0,
+  chartPadding: {top:40},
+   plugins: [Chartist.plugins.legend({
+     legendNames: ['Lil smokies', 'Lil pebbles', 'Mudslide']
+   })]
 });
 
 // Let's put a sequence number aside so we can use it in the event callbacks
 var seq = 0,
-  delays = 80,
-  durations = 200;
+  delays = 40,
+  durations = 200,
+  gridduration=1;
 
 // Once the chart is fully created we reset the sequence
 chart.on('created', function() {
@@ -28,7 +39,7 @@ chart.on('draw', function(data) {
     data.element.animate({
       opacity: {
         // The delay when we like to start the animation
-        begin: seq * delays + 1000,
+        begin: seq * (delays *2),
         // Duration of the animation
         dur: durations,
         // The value where the animation should start
@@ -41,7 +52,7 @@ chart.on('draw', function(data) {
     data.element.animate({
       y: {
         begin: seq * delays,
-        dur: durations,
+        dur: gridduration,
         from: data.y + 100,
         to: data.y,
         // We can specify an easing function from Chartist.Svg.Easing
@@ -52,7 +63,7 @@ chart.on('draw', function(data) {
     data.element.animate({
       x: {
         begin: seq * delays,
-        dur: durations,
+        dur: gridduration,
         from: data.x - 100,
         to: data.x,
         easing: 'easeOutQuart'
@@ -82,37 +93,7 @@ chart.on('draw', function(data) {
         easing: 'easeOutQuart'
       }
     });
-  } else if(data.type === 'grid') {
-    // Using data.axis we get x or y which we can use to construct our animation definition objects
-    var pos1Animation = {
-      begin: seq * delays,
-      dur: durations,
-      from: data[data.axis.units.pos + '1'] - 30,
-      to: data[data.axis.units.pos + '1'],
-      easing: 'easeOutQuart'
-    };
-
-    var pos2Animation = {
-      begin: seq * delays,
-      dur: durations,
-      from: data[data.axis.units.pos + '2'] - 100,
-      to: data[data.axis.units.pos + '2'],
-      easing: 'easeOutQuart'
-    };
-
-    var animations = {};
-    animations[data.axis.units.pos + '1'] = pos1Animation;
-    animations[data.axis.units.pos + '2'] = pos2Animation;
-    animations['opacity'] = {
-      begin: seq * delays,
-      dur: durations,
-      from: 0,
-      to: 1,
-      easing: 'easeOutQuart'
-    };
-
-    data.element.animate(animations);
-  }
+  } 
 });
 
 // For the sake of the example we update the chart every time it's created with a delay of 10 seconds
