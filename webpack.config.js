@@ -1,11 +1,42 @@
-var path = require('path');
+const webpack = require('webpack');
+const path = require('path');
+
+const ENV = process.env.NODE_ENV || 'development';
 
 module.exports = {
-  entry:{
-      ordoesshe: './src/js/ordoesshe.js'
-    },
+  entry:  './src/index.js',
   output: {
-    filename: '[name].bundle.js',
-    path: path.resolve(__dirname, './src/dist')
-  }
+    path: `./src/dist/`,
+    publicPath: __dirname,
+    filename: 'bundle.js',
+  },
+
+  resolve: {
+    extensions: ['','.jsx', '.js'],
+  },
+
+  module: {
+    loaders: [
+      {
+        test: /\.jsx?$/,
+        exclude: './node_modules/',
+        loader: 'babel-loader',
+      },
+    ],
+  },
+
+  plugins: ENV === 'production' ? [
+    new webpack.optimize.UglifyJsPlugin({
+      minimize: true,
+      compress: { warnings: false },
+    }),
+  ] : [],
+
+  stats: {
+    colors: true,
+  },
+  
+  devServer: {
+    disableHostCheck: true,
+  },
 };

@@ -1,40 +1,91 @@
-importScripts('workbox-sw.prod.v1.0.1.js');
-
-/**
- * DO NOT EDIT THE FILE MANIFEST ENTRY
- *
- * The method precache() does the following:
- * 1. Cache URLs in the manifest to a local cache.
- * 2. When a network request is made for any of these URLs the response
- *    will ALWAYS comes from the cache, NEVER the network.
- * 3. When the service worker changes ONLY assets with a revision change are
- *    updated, old cache entries are left as is.
- *
- * By changing the file manifest manually, your users may end up not receiving
- * new versions of files because the revision hasn't changed.
- *
- * Please use workbox-build or some other tool / approach to generate the file
- * manifest which accounts for changes to local files and update the revision
- * accordingly.
- */
-const fileManifest = [
-  {
-    "url": "/css/main.css",
-    "revision": "f4eae9ed7c7725098b14017e609f4de4"
-  },
-  {
-    "url": "/index.html",
-    "revision": "d1e175801e45a5ba11a3e0ff56c4b855"
-  },
-  {
-    "url": "/js/app.js",
-    "revision": "749d3bcfaad86a7f9b2e9d0407c6798e"
-  },
-  {
-    "url": "/workbox-sw.prod.v1.0.1.js",
-    "revision": "3fbc93cd82283d7c3a2cb4dcaf36be91"
-  }
+const CACHE_NAME = 'lilpebbles-gallery-v01';
+const expectedCaches = [CACHE_NAME];
+const staticFiles = [
+  './',
+  './main.css',
+  './build/bundle.js',
 ];
 
-const workboxSW = new self.WorkboxSW();
-workboxSW.precache(fileManifest);
+/**
+ * Performs install steps.
+ */
+self.addEventListener('install', (event) => {
+  self.skipWaiting();
+  event.waitUntil(
+    caches.open(CACHE_NAME).then(cache => cache.addAll(staticFiles))
+  );
+});
+
+/**
+ * Handles requests: responds with cache or else network.
+ */
+self.addEventListener('fetch', (event) => {
+  const url = new URL(event.request.url);
+  event.respondWith(
+    caches.match(event.request).then(response => response || fetch(event.request))
+  );
+});
+
+/**
+ * Cleans up static cache and activates the Service Worker.
+ */
+self.addEventListener('activate', (event) => {
+  event.waitUntil(
+    caches.keys().then(keys => Promise.all(
+      keys.map((key) => {
+        if (!expectedCaches.includes(key)) {
+          return caches.delete(key);
+        }
+      })
+    )).then(() => {
+      console.log(`${CACHE_NAME} now ready to handle fetches!`);
+      return clients.claim();
+    }).then(() => {
+      return self.clients.matchAll().then(clients =>
+        Promise.all(clients.map(client =>
+          client.postMessage('The service worker has activated and taken control. This application can now be used offline.')
+        ))
+      );
+    })
+  );
+});
+
+/**
+ * Listens to messages from the client.
+ */
+self.addEventListener('message', (event) => {
+  caches.open('custom').then((cache) => {
+    switch (event.data.command) {
+      /**
+       * Requests asset and add it to the custom cache.
+       */
+      case 'add':
+        return fetch(new Request(event.data.url, { mode: 'no-cors' }))
+          .then(response => cache.put(event.data.url, response))
+          .then(() => {
+            event.ports[0].postMessage({
+              error: null,
+              data: event.data,
+              count: cache.keys().length,
+            });
+          });
+
+      /**
+       * Removes an existing asset from the custom cache.
+       */
+      case 'delete':
+        return cache.delete(event.data.url).then((success) => {
+          event.ports[0].postMessage({
+            error: success ? null : 'Item was not found in the cache.',
+            count: cache.keys().length,
+          });
+        });
+
+      /**
+       * Called event is unknown.
+       */
+      default:
+        throw Error(`Unknown command: ${event.data.command}`);
+    }
+  });
+});

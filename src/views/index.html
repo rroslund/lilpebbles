@@ -1,132 +1,49 @@
 <html>
 	<head>
-		<link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
-		<link rel="stylesheet" href="/css/main.css">
-		<link rel="stylesheet" href="/css/pebbles.css">
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+        <meta name="description" content="A PWA to determin if LilPebbles does indeed rock.">
+        <meta name="author" content="Rich Roslund">
+
+         <!-- iOS touch icon -->
+        <link rel="apple-touch-icon" href="./images/touch/OG_touch.png">
+        <!-- Favicon -->
+        <link rel="icon" href="./images/favicon.ico?v=1">
+
+        <!-- Web Application Manifest -->
+        <link rel="manifest" href="./manifest.json">
+        
+        <!-- Add to homescreen for Chrome on Android -->
+        <meta name="mobile-web-app-capable" content="yes">
+        
+        <!-- Color the status bar on mobile devices -->
+        <meta name="theme-color" content="#EF6C00">
+
+		<link rel="stylesheet" href="/css/gallery.css">
 
 		<!--<meta name="viewport" content="width=device-width, initial-scale=1.0">-->
-        <meta name="viewport" content="width=device-width,initial-scale=1">
+        
 		<title>Lil Pebbles</title>
 	</head>
 	<body>
 		
-        <div class="cont s--inactive">
-            <!-- cont inner start -->
-            <div class="cont__inner">
-                <!-- el start -->
-                <div class="el">
-                <div class="el__overflow">
-                    <div class="el__inner">
-                    <div class="el__bg"></div>
-                    <div class="el__preview-cont">
-                        <h2 class="el__heading"></h2>
-                    </div>
-                    <div class="el__content">
-                        <div class="el__text">Poise</div>
-                        <div class="el__close-btn"></div>
-                    </div>
-                    </div>
-                </div>
-                <div class="el__index">
-                    <div class="el__index-back">1</div>
-                    <div class="el__index-front">
-                    <div class="el__index-overlay" data-index="1">1</div>
-                    </div>
-                </div>
-                </div>
-                <!-- el end -->
-                <!-- el start -->
-                <div class="el">
-                <div class="el__overflow">
-                    <div class="el__inner">
-                    <div class="el__bg"></div>
-                    <div class="el__preview-cont">
-                        <h2 class="el__heading"></h2>
-                    </div>
-                    <div class="el__content">
-                        <div class="el__text">Focus</div>
-                        <div class="el__close-btn"></div>
-                    </div>
-                    </div>
-                </div>
-                <div class="el__index">
-                    <div class="el__index-back">2</div>
-                    <div class="el__index-front">
-                    <div class="el__index-overlay" data-index="2">2</div>
-                    </div>
-                </div>
-                </div>
-                <!-- el end -->
-                <!-- el start -->
-                <div class="el">
-                <div class="el__overflow">
-                    <div class="el__inner">
-                    <div class="el__bg"></div>
-                    <div class="el__preview-cont">
-                        <h2 class="el__heading"></h2>
-                    </div>
-                    <div class="el__content">
-                        <div class="el__text">Strength</div>
-                        <div class="el__close-btn"></div>
-                    </div>
-                    </div>
-                </div>
-                <div class="el__index">
-                    <div class="el__index-back">3</div>
-                    <div class="el__index-front">
-                    <div class="el__index-overlay" data-index="3">3</div>
-                    </div>
-                </div>
-                </div>
-                <!-- el end -->
-                <!-- el start -->
-                <div class="el">
-                <div class="el__overflow">
-                    <div class="el__inner">
-                    <div class="el__bg"></div>
-                    <div class="el__preview-cont">
-                        <h2 class="el__heading"></h2>
-                    </div>
-                    <div class="el__content">
-                        <div class="el__text">Honor</div>
-                        <div class="el__close-btn"></div>
-                    </div>
-                    </div>
-                </div>
-                <div class="el__index">
-                    <div class="el__index-back">4</div>
-                    <div class="el__index-front">
-                    <div class="el__index-overlay" data-index="4">4</div>
-                    </div>
-                </div>
-                </div>
-                <!-- el end -->
-                <!-- el start -->
-                <div class="el">
-                <div class="el__overflow">
-                    <div class="el__inner">
-                    <div class="el__bg"></div>
-                    <div class="el__preview-cont">
-                        <h2 class="el__heading"></h2>
-                    </div>
-                    <div class="el__content">
-                        <div class="el__text">Endurance</div>
-                        <div class="el__close-btn"></div>
-                    </div>
-                    </div>
-                </div>
-                <div class="el__index">
-                    <div class="el__index-back">5</div>
-                    <div class="el__index-front">
-                    <div class="el__index-overlay" data-index="5">5</div>
-                    </div>
-                </div>
-                </div>
-                <!-- el end -->
+        <div class="no-support-shell">
+            <div id="toolbar">
+            <div class="container">
+                <span>Offline Gallery</span>
             </div>
-            <!-- cont inner end -->
             </div>
-    
-		<script src="js/app.js" async></script>
+            <main>
+            <div class="container">
+                <p>This application is built with <a href="https://preactjs.com/">Preact</a> and requires Javascript to work.</p>
+            </div>
+            </main>
+        </div>
+        <script>
+            document.querySelector('.no-support-shell').outerHTML = ''; 
+            if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js');
+        </script>
+        <script src="./build/bundle.js"></script>
 	</body>
 </html>
