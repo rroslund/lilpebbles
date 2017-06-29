@@ -1,0 +1,13 @@
+web:
+    restart: always
+    build: .
+    ports:
+        - "8000:8000"
+    links:
+        - redis:redis
+    volumes:
+        - .:/app
+    env_file: .env
+    command: /usr/bin/gunicorn lilpebbles:app -w 2 -b 0.0.0.0:8000 --reload --worker-class sanic.worker.GunicornWorker
+redis:
+    image: "redis:alpine"

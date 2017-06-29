@@ -3,8 +3,8 @@ import os
 import sys
 from sanic import Sanic
 from sanic import response
-from aoiklivereload import LiveReloader
 import glob
+from sanic.response import json
 
 
 app = Sanic()
@@ -25,17 +25,15 @@ addfiles('dist/','js/','*.js')
 addfiles('images/','images/','*.*')
 addfiles('views/','','*.html')
 
+@app.route("/test")
+async def test(request):
+    return json("hello world")
 
 @app.route("/")
-async def test(request):
+async def index(request):
     return await response.file('./src/views/index.html')
     #return json({"hello": "world"})
 
 
 if __name__ == "__main__":
-    src_path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-    if src_path not in sys.path:
-            sys.path.append(src_path)
-    reloader = LiveReloader()
-    reloader.start_watcher_thread()
     app.run(host="0.0.0.0", port=8000, workers=4)
