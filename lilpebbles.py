@@ -5,6 +5,7 @@ from sanic import Sanic
 from sanic import response
 import glob
 from sanic.response import json
+from sanic.response import text
 
 
 app = Sanic()
@@ -27,12 +28,15 @@ addfiles('views/','','*.html')
 
 @app.route("/test")
 async def test(request):
-    return json("hello world")
+    return json("hello world!")
+
+@app.route("/luna")
+async def luna(request):
+    return await response.file('./src/views/luna.html')
 
 @app.route("/")
 async def index(request):
     return await response.file('./src/views/index.html')
-    #return json({"hello": "world"})
 
 
 if __name__ == "__main__":
