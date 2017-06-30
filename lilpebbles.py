@@ -26,6 +26,7 @@ addfiles('src/dist/','js/','*.js')
 addfiles('src/images/','images/','*.*')
 addfiles('src/views/','','*.html')
 addfiles('src/dist/','dist/','*.js')
+app.static('sw.js','sw.js')
 
 @app.route("/test")
 async def test(request):

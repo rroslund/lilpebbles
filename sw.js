@@ -2,8 +2,8 @@ const CACHE_NAME = 'lilpebbles-gallery-v01';
 const expectedCaches = [CACHE_NAME];
 const staticFiles = [
   './',
-  './main.css',
-  './build/bundle.js',
+  './css/main.css',
+  './dist/bundle.js',
 ];
 
 /**

@@ -34,7 +34,7 @@ export default class Toolbar extends Component {
   };
 
   render({ selected, images }) {
-    const toolbarColor = selected === null ? '#EF6C00' : '#212121';
+    const toolbarColor = selected === null ? '#2f3840' : '#212121';
     const style = { background: toolbarColor };
     document.querySelector('[name=theme-color]').setAttribute('content', toolbarColor);
     const iconStyle = { display: selected === null ? 'none' : 'block' };
