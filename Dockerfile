@@ -19,10 +19,9 @@ RUN apk add --no-cache --virtual .build-deps \
                   apk del python3-dev .build-deps build-base &&\
                   rm -r /root/.cache
 
-RUN npm install webpack -g
-RUN apk add --no-cache python3
+RUN apk add --no-cache python3 --no-cache git --no-cache vim && npm install -g yarn webpack
 RUN mkdir /app
 ADD . /app/
 WORKDIR /app
-RUN pip3 install -r requirements.txt && npm install
+RUN pip3 install -r requirements.txt && yarn install --force --no-bin-links
 RUN npm run build

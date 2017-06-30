@@ -4,22 +4,22 @@ const path = require('path');
 const ENV = process.env.NODE_ENV || 'development';
 
 module.exports = {
-  entry:  './src/index.js',
+  entry: `${__dirname}/src/index.js`,
   output: {
-    path: `./src/dist/`,
+    path: `${__dirname}/src/dist/`,
     publicPath: __dirname,
     filename: 'bundle.js',
   },
 
   resolve: {
-    extensions: ['','.jsx', '.js'],
+    extensions: ['.jsx', '.js'],
   },
 
   module: {
     loaders: [
       {
         test: /\.jsx?$/,
-        exclude: './node_modules/',
+        exclude: `${__dirname}/node_modules/`,
         loader: 'babel-loader',
       },
     ],
