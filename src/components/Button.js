@@ -15,18 +15,29 @@ export default class Button extends Component {
   toggleModal = () => {
     this.props.setModal(!this.props.modal);
   };
-
+  handleChange = (e) =>{
+    e.preventDefault();
+    console.log(e.target.files[0])
+  }
   render({ modal, network }) {
     const style = {
       transform: modal || !network ? 'scale3d(0, 0, 0)' : 'scale3d(1, 1, 1)',
     };
     return (
-      <button id="add" style={style} onClick={this.toggleModal}>
-        <svg fill="#FFFFFF" height="24" viewBox="0 0 24 24" width="24">
-          <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
-          <path d="M0 0h24v24H0z" fill="none" />
-        </svg>
-      </button>
+      <div>
+        <div style="position:absolute;right:10%;top:84%;width:56px;height:56px;">
+          <form action="" onSubmit={this.handleSubmit}>
+            
+          <label id="labelForPicker" class="picker" for="filepicker" tabindex="1" aria-label="Choose a photo">
+            <svg fill="#FFFFFF" height="55" viewBox="0 0 24 24" width="24">
+              <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
+              <path d="M0 0h24v24H0z" fill="none" />
+            </svg>
+            </label>
+            <input id="filepicker" style="display:none;width:0px;" type="file" accept="image/*;capture=camera" onChange={this.handleChange}/>
+          </form>
+        </div>
+      </div>
     );
   }
 }

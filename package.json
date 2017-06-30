@@ -5,7 +5,8 @@
   "main": "src/index.js",
   "scripts": {
     "dev": "webpack --watch | webpack-dev-server --port 3000 --hot --host 0.0.0.0",
-    "build": "webpack -p --progress"
+    "build": "webpack -p --progress",
+    "watch": "webpack --watch"
   },
   "dependencies": {
     "chartist": "^0.11.0",
