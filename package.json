@@ -11,9 +11,11 @@
   "dependencies": {
     "chartist": "^0.11.0",
     "chartist-plugin-legend": "^0.6.1",
+    "gulp": "^3.9.1",
     "preact": "^8.1.0",
     "preact-redux": "^2.0.1",
     "redux": "^3.6.0",
+    "workbox-build": "^1.0.1",
     "yarn": "^0.24.5"
   },
   "devDependencies": {

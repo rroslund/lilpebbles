@@ -5,7 +5,10 @@ from sanic import Sanic
 from sanic import response
 import glob
 from sanic.response import json
-from sanic.response import text
+import boto3
+from sanic.response import stream, text
+
+bucket='lilpebbles'
 
 
 app = Sanic()
@@ -39,6 +42,18 @@ async def luna(request):
 @app.route("/")
 async def index(request):
     return await response.file('./src/views/index.html')
+
+def uploadImage(file):
+    print(file.name)
+    s3 = boto3.resource('s3')
+    s3.Bucket(bucket).put_object(Key=file.name, Body=file.body)
+
+
+
+@app.route("/image", methods=['POST'])
+async def img(request):
+    uploadImage(request.files.get('img'))
+    return json({"files":len(request.files)})
 
 
 if __name__ == "__main__":
