@@ -43,17 +43,22 @@ async def luna(request):
 async def index(request):
     return await response.file('./src/views/index.html')
 
-def uploadImage(file):
-    print(file.name)
+def uploadImage(path,file):
     s3 = boto3.resource('s3')
-    s3.Bucket(bucket).put_object(Key=file.name, Body=file.body)
+    s3.Bucket(bucket).put_object(Key=path+file.name, Body=file.body)
 
-
-
-@app.route("/image", methods=['POST'])
+@app.route("/images", methods=['POST'])
 async def img(request):
-    uploadImage(request.files.get('img'))
-    return json({"files":len(request.files)})
+    f=request.files.get('img')
+    file = f.name
+    uploadImage('images/',f)
+    return json({
+        "main":'https://s3.amazonaws.com/lilpebbles/images/'+file,
+        "thumb":'https://s3.amazonaws.com/lilpebbles/images/thumb/'+file,
+        "xsmall":'https://s3.amazonaws.com/lilpebbles/images/xsmall/'+file,
+        "small":'https://s3.amazonaws.com/lilpebbles/images/small/'+file,
+        "medium":'https://s3.amazonaws.com/lilpebbles/images/medium/'+file,
+        })
 
 
 if __name__ == "__main__":

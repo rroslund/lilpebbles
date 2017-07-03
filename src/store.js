@@ -38,6 +38,7 @@ const ACTIONS = {
 
 const INITIAL = {
   images: loadState('images') || [],
+  files:loadState('files') || [],
   modal: false,
   selected: null,
   network: navigator.onLine,
