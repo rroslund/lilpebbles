@@ -8,10 +8,18 @@ import glob
 from sanic.response import json
 import boto3
 from sanic.response import stream, text
+from cache import cachebp
+from s3util import s3wrapper
+from redisutil import rediswrapper
 
-bucket='lilpebbles'
+
 
 app = Sanic()
+app.blueprint(cachebp)
+
+bucket='lilpebbles'
+s3 = s3wrapper(bucket,'images/')
+redis = rediswrapper(hashname='images')
 
 app.static('/or-does-she', './src/views/ordoesshe.html')
 app.static('/', './')
@@ -31,6 +39,15 @@ addfiles('src/views/','','*.html')
 addfiles('src/dist/','dist/','*.js')
 app.static('sw.js','sw.js')
 
+def buildCacheValue(file):
+    return {
+        "main":'https://s3.amazonaws.com/lilpebbles/images/'+file,
+        "thumb":'https://s3.amazonaws.com/lilpebbles/images/thumb/'+file,
+        "xsmall":'https://s3.amazonaws.com/lilpebbles/images/xsmall/'+file,
+        "small":'https://s3.amazonaws.com/lilpebbles/images/small/'+file,
+        "medium":'https://s3.amazonaws.com/lilpebbles/images/medium/'+file,
+        }
+
 @app.route("/test")
 async def test(request):
     return json("hello world!")
@@ -43,23 +60,37 @@ async def luna(request):
 async def index(request):
     return await response.file('./src/views/index.html')
 
-def uploadImage(path,file):
-    s3 = boto3.resource('s3')
-    s3.Bucket(bucket).put_object(Key=path+file.name, Body=file.body)
+@app.route("/images", methods=['GET'])
+async def img_get(request):
+    res = redis.all()
+    return json(res)
+
+@app.route("/images/<image>", methods=['DELETE'])
+async def img_delete(request,image):
+    print("deleting "+image)
+    file = image
+    s3.delete(image)
+    redis.delete(file)
+    return json(redis.count())
 
 @app.route("/images", methods=['POST'])
 async def img(request):
     f=request.files.get('img')
     file = f.name
-    uploadImage('images/',f)
-    return json({
-        "main":'https://s3.amazonaws.com/lilpebbles/images/'+file,
-        "thumb":'https://s3.amazonaws.com/lilpebbles/images/thumb/'+file,
-        "xsmall":'https://s3.amazonaws.com/lilpebbles/images/xsmall/'+file,
-        "small":'https://s3.amazonaws.com/lilpebbles/images/small/'+file,
-        "medium":'https://s3.amazonaws.com/lilpebbles/images/medium/'+file,
-        })
+    #uploadImage('images/',f)
+    s3.upload(f.name,f.body)
+    res = buildCacheValue(file)
+    redis.set(file,res)
+    return json(res)
 
+@app.route("/refresh", methods=['GET'])
+async def refresh(request):
+    allimgs = s3.all(prefix="images/original/")
+    for img in allimgs:
+        file = os.path.basename(img)
+        res = buildCacheValue(file)
+        redis.set(file,res)
+    return json(redis.all())
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8000, workers=4)
