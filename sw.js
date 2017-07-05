@@ -96,14 +96,14 @@ self.addEventListener('message', (event) => {
       /**
        * Removes an existing asset from the custom cache.
        */
-      case 'delete':
+      case 'delete':{
         return cache.delete(event.data.url).then((success) => {
+          console.warn(success ? null : 'Item was not found in the cache.');
           event.ports[0].postMessage({
-            error: success ? null : 'Item was not found in the cache.',
             count: cache.keys().length,
           });
         });
-
+      }
       /**
        * Called event is unknown.
        */

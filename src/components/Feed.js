@@ -25,11 +25,9 @@ export default class Feed extends Component {
         {(images.length < 1) ? (
           <main>
             <div className="container">
-              <p>This application uses the <a href="https://www.w3.org/TR/service-workers/">Service Worker API</a> which allows the user control over the cache.</p>
-              <p>This application shows how <a href="https://developer.mozilla.org/en-US/docs/Web/API/Client/postMessage">postMessage()</a> can be used to let the client communicate with the Service Worker to load assets, place them in the cache and display them instantly afterwards.</p>
-              <p>After loading an external asset it's available offline and can also be removed from the cache.</p>
+              <p>Post pictures of your pebbles!</p>
               {('serviceWorker' in navigator) ? (<p />) : (
-                <p>Sadly your browser does not support this functionality yet. The application will work but not offline. Support for this feature can be found on <a href="https://jakearchibald.github.io/isserviceworkerready/">isserviceworkerready</a>.</p>
+                <p>Sadly your browser does not support this functionality yet.</p>
               )}
             </div>
           </main>

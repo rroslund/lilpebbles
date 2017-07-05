@@ -3,7 +3,7 @@
  */
 export const loadState = (state) => {
   try {
-    const serializedState = localStorage.getItem('offline-gallery');
+    const serializedState = localStorage.getItem('lilpebbles');
     console.log("Loading state");
     if (serializedState === null) {
       return undefined;
@@ -22,7 +22,7 @@ export const loadState = (state) => {
 export const saveState = (stateValue) => {
   try {
     const serializedState = JSON.stringify(stateValue);
-    localStorage.setItem('offline-gallery', serializedState);
+    localStorage.setItem('lilpebbles', serializedState);
   } catch (err) {
     // Ignore
   }
