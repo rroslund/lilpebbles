@@ -4,6 +4,7 @@ import { connect } from 'preact-redux';
 import { bindActions } from './../util';
 import reduce from './../reducers';
 import * as actions from './../actions';
+import command from './../utils/command';
 
 @connect(reduce, bindActions(actions))
 export default class Button extends Component {
@@ -18,6 +19,15 @@ export default class Button extends Component {
   handleChange = (e) =>{
     e.preventDefault();
     console.log(e.target.files[0])
+    console.log('handlechange');
+    if ('serviceWorker' in navigator) {
+      command({ command: 'addimg', file: e.target.files[0] })
+      .then((response) => {
+        this.props.addImage(response.data.small);
+      });
+    } else {
+      this.props.addImage(response.data.small);
+    }
   }
   render({ modal, network }) {
     const style = {

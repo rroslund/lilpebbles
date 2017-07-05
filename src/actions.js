@@ -2,6 +2,10 @@ export const addImage = image => ({
   type: 'ADD_IMAGE',
   image,
 });
+export const addImageFile = files => ({
+  type: 'ADD_IMAGE_FILE',
+  files,
+});
 
 export const removeImage = image => ({
   type: 'REMOVE_IMAGE',

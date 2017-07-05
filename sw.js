@@ -59,6 +59,27 @@ self.addEventListener('message', (event) => {
       /**
        * Requests asset and add it to the custom cache.
        */
+      case 'addimg':
+        var formData = new FormData();
+        formData.append('img', event.data.file);
+        return fetch('/images', {
+          method:'POST',
+          body: formData
+        })
+        .then(response => response.json())
+        .then(response => {
+          return fetch(new Request(response.small, { mode: 'no-cors' }));
+        }).then(response => cache.put(event.data.url, response))
+          .then(() => {
+            event.ports[0].postMessage({
+              error: null,
+              data: event.data,
+              count: cache.keys().length,
+            });
+          });
+      /**
+       * Requests asset and add it to the custom cache.
+       */
       case 'add':
         return fetch(new Request(event.data.url, { mode: 'no-cors' }))
           .then(response => cache.put(event.data.url, response))

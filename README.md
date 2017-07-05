@@ -7,7 +7,7 @@ docker run --rm -it -p 8000:8000 rroslund/lilpebbles
 
 ## Local development ##
 ```bash
-npm run watch
+./up.sh && npm run watch
 ```
 
 ## TODO ##

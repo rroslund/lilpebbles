@@ -1,0 +1,32 @@
+{
+  "bucket": "lilpebbles",
+  "backup":{
+	  "directory":"./original"
+  },
+  "resizes": [
+  {
+	"size":40,
+	"directory":"./thumb",
+	"quality": 90,
+	"acl": "public-read"
+  },{
+      "size": 150,
+      "directory": "./xsmall",
+      "quality": 80,
+      "acl": "public-read"
+    },
+    {
+      "size": 300,
+      "directory": "./small",
+      "suffix":"_small",
+      "quality": 90,
+      "acl": "public-read"
+    },
+    {
+      "size": 600,
+      "directory": "./medium",
+      "suffix":"_medium",
+      "quality": 90
+    }
+  ]
+}
