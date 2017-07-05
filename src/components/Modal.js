@@ -4,7 +4,6 @@ import { connect } from 'preact-redux';
 import { bindActions } from './../util';
 import reduce from './../reducers';
 import * as actions from './../actions';
-
 import command from './../utils/command';
 
 @connect(reduce, bindActions(actions))

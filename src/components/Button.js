@@ -23,9 +23,12 @@ export default class Button extends Component {
     if ('serviceWorker' in navigator) {
       command({ command: 'addimg', file: e.target.files[0] })
       .then((response) => {
+        console.log("sw response:");
+        console.log(response);
         this.props.addImage(response.data.small);
       });
     } else {
+      console.log(response);
       this.props.addImage(response.data.small);
     }
   }

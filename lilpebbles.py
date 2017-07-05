@@ -10,7 +10,6 @@ from sanic.response import stream, text
 
 bucket='lilpebbles'
 
-
 app = Sanic()
 
 app.static('/or-does-she', './src/views/ordoesshe.html')

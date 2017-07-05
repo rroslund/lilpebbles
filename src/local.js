@@ -4,6 +4,7 @@
 export const loadState = (state) => {
   try {
     const serializedState = localStorage.getItem('offline-gallery');
+    console.log("Loading state");
     if (serializedState === null) {
       return undefined;
     }
