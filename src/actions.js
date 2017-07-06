@@ -11,7 +11,10 @@ export const removeImage = image => ({
   type: 'REMOVE_IMAGE',
   image,
 });
-
+export const setRefreshed = toggleState => ({
+  type: 'SET_REFRESHED',
+  toggleState,
+});
 export const setModal = toggleState => ({
   type: 'SET_MODAL',
   toggleState,

@@ -16,11 +16,28 @@ export default class Button extends Component {
   toggleModal = () => {
     this.props.setModal(!this.props.modal);
   };
+  refresh = (e) =>{
+    e.preventDefault();
+    if ('serviceWorker' in navigator) {
+      command({ command: 'refresh' })
+      .then((response) => {
+        var button = this;
+        console.log(response);
+        Object.keys(response.data).forEach(function(img){
+          button.props.addImage(response.data[img].small);  
+        })
+        //this.props.setRefreshed(!this.props.refreshed);
+      });
+    } else {
+      this.props.setRefreshed(!this.props.refreshed);
+    }
+  }
   handleChange = (e) =>{
     e.preventDefault();
     if ('serviceWorker' in navigator) {
       command({ command: 'addimg', file: e.target.files[0] })
       .then((response) => {
+        console.log(this);
         this.props.addImage(response.data.small);
       });
     } else {
@@ -43,6 +60,18 @@ export default class Button extends Component {
             </svg>
             </label>
             <input id="filepicker" style="display:none;width:0px;" type="file" accept="image/*;capture=camera" onChange={this.handleChange}/>
+          </form>
+        </div>
+
+        <div style="position:absolute;left:10%;top:84%;width:56px;height:56px;">
+          <form action="" onSubmit={this.handleSubmit}>
+            
+          <label id="labelForRefresh" class="picker" for="refresh" tabindex="1" aria-label="Refresh">
+            <span class="refresh fa-stack fa-lg">
+              <i class="fa fa-refresh fa-stack-1x fa-inverse"></i>
+            </span>
+            </label>
+            <button type="button" id="refresh" style="display:none;width:0px;" onClick={this.refresh}/>
           </form>
         </div>
       </div>

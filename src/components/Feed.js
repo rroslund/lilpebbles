@@ -11,15 +11,15 @@ import Item from './Item';
 @connect(reduce, bindActions(actions))
 export default class Feed extends Component {
   
-  shouldComponentUpdate({ images }) {
-    return images !== this.props.images;
+  shouldComponentUpdate({ images,refreshed }) {
+    return images !== this.props.images || refreshed !== this.props.refreshed;
   }
 
   selectImage = (image) => {
     this.props.setSelected(image);
   }
 
-  render({ images }) {
+  render({ images ,refreshed}) {
     return (
       <div id="feed">
         {(images.length < 1) ? (

@@ -349,3 +349,8 @@ span.ripple{
     width: 50px;
     overflow: hidden;
 }
+
+.fa-stack.refresh{
+    font-size: 16px;
+    line-height: 3.5em;
+}

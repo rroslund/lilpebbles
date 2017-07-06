@@ -9,12 +9,11 @@ const ACTIONS = {
     }],
     ...state,
   }),
-
+  
   REMOVE_IMAGE: ({ images, ...state }, { image }) => ({
     images: images.filter(i => i !== image),
     ...state,
   }),
-
   SET_MODAL: ({ modal, ...state }, { toggleState }) => ({
     modal: toggleState,
     ...state,
@@ -24,7 +23,10 @@ const ACTIONS = {
     selected: image,
     ...state,
   }),
-
+SET_REFRESHED: ({ refreshed, ...state }, { toggleState }) => ({
+    refreshed: toggleState,
+    ...state,
+  }),
   SET_NETWORK: ({ network, ...state }, { toggleState }) => ({
     network: toggleState,
     ...state,
@@ -41,6 +43,7 @@ const INITIAL = {
   files:loadState('files') || [],
   modal: false,
   selected: null,
+  refreshed:false,
   network: navigator.onLine,
   toast: '',
 };

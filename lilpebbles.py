@@ -2,6 +2,7 @@
 import os
 import sys
 import re
+import json
 from sanic import Sanic
 from sanic import response
 import glob
@@ -91,6 +92,12 @@ async def refresh(request):
         res = buildCacheValue(file)
         redis.set(file,res)
     return json(redis.all())
+
+@app.route("/clear", methods=['GET'])
+async def refresh(request):
+    redis.deleteall();
+    return json(redis.all())
+    
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8000, workers=4)

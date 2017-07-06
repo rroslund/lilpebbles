@@ -54,8 +54,51 @@ self.addEventListener('activate', (event) => {
  * Listens to messages from the client.
  */
 self.addEventListener('message', (event) => {
+
+  var delay = function(time){
+    return new Promise(function(resolve){
+        setTimeout(resolve, time);
+    });
+  };
+  function tryFetch(req){
+    return delay(1000).then(() =>{
+    return fetch(req).catch(function(e){
+      return e;
+    })});
+  };
+
   caches.open('custom').then((cache) => {
     switch (event.data.command) {
+      case 'refresh':{
+        var cacheKeys = cache.keys().length
+        return fetch('/refresh', {method:'GET'})
+        .then(response => response.json())
+        .then(response => {
+          var refreshed = false;
+          var refreshedKeys = Object.keys(response);
+          return cache.keys()
+            .then(function(keys){
+              var getMissingImages = refreshedKeys.filter(function(rKey){
+                  return !keys.find(function(cKey){ 
+                    return cKey.url==response[rKey].small
+                  })
+                }).map(key =>{
+                  var obj = response[key];  
+                  return fetch(new Request(obj.small, { mode: 'no-cors' }))
+                  .then(res => cache.put(obj.small, res))
+                  .then(() =>obj);
+                });
+              return Promise.all(getMissingImages);
+            })          
+            .then(function(updatedCacheResponse){
+              event.ports[0].postMessage({
+                  error: null,
+                  data: updatedCacheResponse,
+                  count: cache.keys().length,
+                });
+            });
+          });
+      }
       /**
        * Requests asset and add it to the custom cache.
        */
@@ -68,7 +111,12 @@ self.addEventListener('message', (event) => {
         })
         .then(response => response.json())
         .then(response => {
-          return fetch(new Request(response.small, { mode: 'no-cors' }))
+          return tryFetch(new Request(response.small, { mode: 'no-cors' }))
+          .then(function(res){
+            console.log(res);
+            return res;
+          })
+          .catch(function(e){console.log("tryfetch failed");})
            .then(res => cache.put(response.small, res))
           .then(() => {
               event.ports[0].postMessage({
